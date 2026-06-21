@@ -1,0 +1,62 @@
+# Step 1: Import libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+# Step 2: Create sample dataset
+data = {
+    'Temperature': [10,12,14,16,18,20,22,24,26,28,30,32,34,36,38],
+    'Sales':       [100,120,150,180,220,280,350,430,520,620,730,850,980,1120,1270]
+}
+
+df = pd.DataFrame(data)
+
+# Step 3: Define X and y
+X = df[['Temperature']]
+y = df['Sales']
+
+# Step 4: Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+
+# Step 5: Create polynomial features (degree=2)
+poly = PolynomialFeatures(degree=2)
+
+X_train_poly = poly.fit_transform(X_train)
+X_test_poly = poly.transform(X_test)
+
+# Step 6: Train model
+model = LinearRegression()
+model.fit(X_train_poly, y_train)
+
+# Step 7: Predictions
+y_pred = model.predict(X_test_poly)
+
+# Step 8: Evaluate
+train_score = model.score(X_train_poly, y_train)
+test_score = model.score(X_test_poly, y_test)
+
+print("Intercept:", model.intercept_)
+print("Coefficients:", model.coef_)
+print("Train R² Score:", train_score)
+print("Test R² Score:", test_score)
+
+# Step 9: Visualization
+X_range = np.linspace(X.min(), X.max(), 100).reshape(-1, 1)
+X_range_poly = poly.transform(X_range)
+
+plt.scatter(X, y, color='blue', label='Actual Data')
+plt.plot(X_range, model.predict(X_range_poly),
+         color='red', linewidth=3, label='Polynomial Regression')
+
+plt.xlabel("Temperature")
+plt.ylabel("Ice Cream Sales")
+plt.title("Polynomial Regression")
+plt.legend()
+plt.show()
