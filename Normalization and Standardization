@@ -71,3 +71,22 @@ print(df)
 
 print("\nStandardized Data:")
 print(scaled_df)
+
+
+Python Code detect outliers
+
+import numpy as np
+
+data = [150, 152, 153, 155, 156, 158, 160, 300]
+
+mean = np.mean(data)
+std = np.std(data)
+
+outliers = []
+
+for x in data:
+    z_score = (x - mean) / std
+    if abs(z_score) > 3:
+        outliers.append(x)
+
+print("Outliers:", outliers)
