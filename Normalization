@@ -1,0 +1,43 @@
+Min-Max
+
+from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
+
+# Sample data
+df = pd.DataFrame({
+    'height': [4.2, 5.8, 6.1, 7.0],
+    'weight': [40, 60, 80, 150]
+})
+
+# Create scaler
+scaler = MinMaxScaler()
+
+# Fit and transform
+df_scaled = scaler.fit_transform(df)
+
+# Convert back to DataFrame
+df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+
+print(df_scaled)
+
+
+applying only on selected columns
+
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+
+df[['height', 'weight']] = scaler.fit_transform(df[['height', 'weight']])
+
+
+Manual Normalization
+
+import pandas as pd
+
+df = pd.DataFrame({
+    'value': [10, 20, 30, 40, 50]
+})
+
+df['normalized'] = (df['value'] - df['value'].min()) / (df['value'].max() - df['value'].min())
+
+print(df)
