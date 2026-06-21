@@ -1,0 +1,92 @@
+import pandas as pd
+
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import LabelEncoder
+
+# -----------------------------
+# Sample Dataset
+# -----------------------------
+
+df = pd.DataFrame({
+    "Output": ["X", "Y", "Z", "X", "Y"],
+    "Class": ["Rich", "Poor", "Middle", "Rich", "Poor"],
+    "Grade": ["A", "D", "B", "C", "A"]
+})
+
+print("Original Dataset:")
+print(df)
+
+# -----------------------------
+# Ordinal Encoding
+# -----------------------------
+
+oe = OrdinalEncoder(
+    categories=[
+        ["Poor", "Middle", "Rich"],   # Class order
+        ["D", "C", "B", "A"]          # Grade order
+    ]
+)
+
+df[["Class", "Grade"]] = oe.fit_transform(
+    df[["Class", "Grade"]]
+)
+
+print("\nAfter Ordinal Encoding:")
+print(df)
+
+print("\nCategories Learned:")
+print(oe.categories_)
+
+# -----------------------------
+# Label Encoding
+# -----------------------------
+
+le = LabelEncoder()
+
+df["Output"] = le.fit_transform(df["Output"])
+
+print("\nAfter Label Encoding:")
+print(df)
+
+print("\nLabel Classes:")
+print(le.classes_)
+
+# -----------------------------
+# Inverse Transform
+# -----------------------------
+
+decoded_output = le.inverse_transform(df["Output"])
+
+print("\nDecoded Output:")
+print(decoded_output)
+
+
+
+
+Expected Output
+Original Dataset
+
+Output  Class   Grade
+X       Rich      A
+Y       Poor      D
+Z       Middle    B
+X       Rich      C
+Y       Poor      A
+
+After Ordinal Encoding:
+
+Output  Class Grade
+X       2     3
+Y       0     0
+Z       1     2
+X       2     1
+Y       0     3
+
+After Label Encoding:
+
+Output  Class Grade
+0       2     3
+1       0     0
+2       1     2
+0       2     1
+1       0     3
